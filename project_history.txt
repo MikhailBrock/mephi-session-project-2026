@@ -1,0 +1,4 @@
+    1  head -n 5 /etc/pam.d/sshd 
+    2  head -n 5 /etc/pam.d/login
+    3  cd ~
+    4  history > project_history.txt
