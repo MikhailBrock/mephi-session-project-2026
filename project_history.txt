@@ -1,4 +1,359 @@
-    1  head -n 5 /etc/pam.d/sshd 
-    2  head -n 5 /etc/pam.d/login
-    3  cd ~
-    4  history > project_history.txt
+    1  ip a
+    2  nmcli con show
+    3  nmcli con mod enp0s3 ipv4.addresses 192.168.1.100/24
+    4  nmcli con mod enp0s3 ipv4.gateway 192.168.1.1
+    5  nmcli con mod enp0s3 ipv4.dns 8.8.8.8
+    6  nmcli con mod enp0s3 ipv4.method manual
+    7  nmcli con up enp0s3
+    8  hostnamectl set-hostname mephi-2026.domain.local
+    9  ip a show enp0s3
+   10  ip route | grep default
+   11  ping -c 4 8.8.8.8
+   12  ping -c 4 192.168.1.1
+   13  ping -c 4 8.8.8.8 > /tmp/network_check.txt
+   14  ping -c 4 192.168.1.1 >> /tmp/network_check.txt
+   15  cat /tmp/network_check.txt
+   16  dnf install -y nginx tcpdump libcap-ng-utils
+   17  cat /etc/resolv.conf
+   18  ping -c 2 8.8.8.8
+   19  printf 'nameserver 8.8.8.8\n' > /etc/resolv.conf
+   20  cat /etc/resolv.conf
+   21  ping -c 3 mirrors.fedoraproject.org
+   22  echo "nameserver 1.1.1.1" >> /ect/resolv.conf
+   23  dnf install -y nginx tcpdump libcap-ng-utils
+   24  nmcli con mod enp0s3 ipv4.method auto
+   25  nmcli con up enp0s3
+   26  ping -c 2 8.8.8.8
+   27  nmcli con mod enp0s3 ipv4.addresses ""
+   28  nmcli con down "enp0s3"
+   29  nmcli con up enp0s3
+   30  ip a
+   31  ip route
+   32  ping -c 2 8.8.8.8
+   33  nmcli con delete enp0s3
+   34  nmcli con add type ethernet ifname enp0s3 con-name dhcp-wired
+   35  nmcli con up "dhcp-wired"
+   36  ip a
+   37  ip route
+   38  ping -c 2 8.8.8.8
+   39  dnf install -y nginx tcpdump libcap-ng-utils
+   40  cd /tmp
+   41  dnf download tcpdump
+   42  ls -la tcpdump*.rpm
+   43  rpm -Uvh tcpdump-*.rpm
+   44  tcpdump --version | head -n 1
+   45  ls -la tcpdump*.rpm
+   46  lsblk
+   47  fdisk -l
+   48  fdisk /dev/sdb
+   49  lsblk
+   50  mkfs.ext4 -L MEPHI_DATA /dev/sdb1
+   51  blkid /dev/sdb1
+   52  mkdir -p /data/mephi-web
+   53  echo "LABLE=MEPHI_DATA /data/mephi-web ext4 defaults 0 2" >> /etc/fstab
+   54  mount -a
+   55  lsblk
+   56  df -h | grep mephi
+   57  sed -i '/LABLE=MEPHI_DATA/s' /etc/fstab
+   58  sed -i '/LABLE=MEPHI_DATA/d' /etc/fstab
+   59  echo "LABEL=MEPHI_DATA /data/mephi-web ext4 defaults 0 2" >> /etc/fstab
+   60  cat /etc/fstab | grep MEPHI
+   61  mount -a
+   62  df -h | grep mephi
+   63  systemctl enable --now nginx
+   64  systemctl status nginx
+   65  journalctl -u nginx --since "5 minutes ago" > /tmp/nginx_recent_logs
+   66  journalctl -u nginx --since "5 minutes ago" > /tmp/nginx_recent_logs.txt
+   67  cat /tmp/nginx_recent_logs.txt
+   68  useradd mephi-admin
+   69  echo "P@ssw0rd2026" | passwd --stdin mephi-admin
+   70  groupadd mephi-devs
+   71  usermod -aG mephi-devs mephi-admin
+   72  id mephi-admin
+   73  chown -R mephi-admin:mephi-devs /data/mephi-web
+   74  chmod 2775 /data/mephi-web
+   75  stat /data/mephi-web
+   76  id mephi-admin
+   77  getent group mephi-devs
+   78  getenforce
+   79  semanage fcontext -a -t httpd_sys_content_t "/data/mephi-web(/.*)?"
+   80  restorecon -Rv /data/mephi-web
+   81  ls -Zd /data/mephi-web
+   82  sed -i 's|root /usr/share/nginx/html;|root /data/mephi-web;|g' /etc/nginx/nginx.conf
+   83  grep "root /data/mephi-web" /etc/nginx/nginx.conf
+   84  nginx -t
+   85  systemctl reload nginx
+   86  ls -la /usr/sbin/tcpdump
+   87  setcap cap_net_raw,cap_net_admin+ep /usr/sbin/tcpdump
+   88  getcap /usr/sbin/tcpdump
+   89  history > /home/mephi-admin/project_history_root.txt
+   90  cat /home/mephi-admin/project_history_root.txt
+   91  sudo -u mephi-admin tcpdump --help
+   92  history > /home/mephi-admin/project_history_root.txt
+   93  cat /home/mephi-admin/project_history_root.txt
+   94  echo root > /etc/ssh/denied_users
+   95  chmod 644 /etc/ssh/denied_users
+   96  vi /etc/pam.d/sshd
+   97  vi /etc/pam.d/login
+   98  head -5 /etc/pam.d/sshd
+   99  head -5 /etc/pam.d/login
+  100  systemctl restart sshd
+  101  systemctl status sshd --no-pager
+  102  history > /home/mephi-admin/project_history_root.txt
+    1  ip a
+    2  nmcli con show
+    3  nmcli con mod enp0s3 ipv4.addresses 192.168.1.100/24
+    4  nmcli con mod enp0s3 ipv4.gateway 192.168.1.1
+    5  nmcli con mod enp0s3 ipv4.dns 8.8.8.8
+    6  nmcli con mod enp0s3 ipv4.method manual
+    7  nmcli con up enp0s3
+    8  hostnamectl set-hostname mephi-2026.domain.local
+    9  ip a show enp0s3
+   10  ip route | grep default
+   11  ping -c 4 8.8.8.8
+   12  ping -c 4 192.168.1.1
+   13  ping -c 4 8.8.8.8 > /tmp/network_check.txt
+   14  ping -c 4 192.168.1.1 >> /tmp/network_check.txt
+   15  cat /tmp/network_check.txt
+   16  dnf install -y nginx tcpdump libcap-ng-utils
+   17  cat /etc/resolv.conf
+   18  ping -c 2 8.8.8.8
+   19  printf 'nameserver 8.8.8.8\n' > /etc/resolv.conf
+   20  cat /etc/resolv.conf
+   21  ping -c 3 mirrors.fedoraproject.org
+   22  echo "nameserver 1.1.1.1" >> /ect/resolv.conf
+   23  dnf install -y nginx tcpdump libcap-ng-utils
+   24  nmcli con mod enp0s3 ipv4.method auto
+   25  nmcli con up enp0s3
+   26  ping -c 2 8.8.8.8
+   27  nmcli con mod enp0s3 ipv4.addresses ""
+   28  nmcli con down "enp0s3"
+   29  nmcli con up enp0s3
+   30  ip a
+   31  ip route
+   32  ping -c 2 8.8.8.8
+   33  nmcli con delete enp0s3
+   34  nmcli con add type ethernet ifname enp0s3 con-name dhcp-wired
+   35  nmcli con up "dhcp-wired"
+   36  ip a
+   37  ip route
+   38  ping -c 2 8.8.8.8
+   39  dnf install -y nginx tcpdump libcap-ng-utils
+   40  cd /tmp
+   41  dnf download tcpdump
+   42  ls -la tcpdump*.rpm
+   43  rpm -Uvh tcpdump-*.rpm
+   44  tcpdump --version | head -n 1
+   45  ls -la tcpdump*.rpm
+   46  lsblk
+   47  fdisk -l
+   48  fdisk /dev/sdb
+   49  lsblk
+   50  mkfs.ext4 -L MEPHI_DATA /dev/sdb1
+   51  blkid /dev/sdb1
+   52  mkdir -p /data/mephi-web
+   53  echo "LABLE=MEPHI_DATA /data/mephi-web ext4 defaults 0 2" >> /etc/fstab
+   54  mount -a
+   55  lsblk
+   56  df -h | grep mephi
+   57  sed -i '/LABLE=MEPHI_DATA/s' /etc/fstab
+   58  sed -i '/LABLE=MEPHI_DATA/d' /etc/fstab
+   59  echo "LABEL=MEPHI_DATA /data/mephi-web ext4 defaults 0 2" >> /etc/fstab
+   60  cat /etc/fstab | grep MEPHI
+   61  mount -a
+   62  df -h | grep mephi
+   63  systemctl enable --now nginx
+   64  systemctl status nginx
+   65  journalctl -u nginx --since "5 minutes ago" > /tmp/nginx_recent_logs
+   66  journalctl -u nginx --since "5 minutes ago" > /tmp/nginx_recent_logs.txt
+   67  cat /tmp/nginx_recent_logs.txt
+   68  useradd mephi-admin
+   69  echo "P@ssw0rd2026" | passwd --stdin mephi-admin
+   70  groupadd mephi-devs
+   71  usermod -aG mephi-devs mephi-admin
+   72  id mephi-admin
+   73  chown -R mephi-admin:mephi-devs /data/mephi-web
+   74  chmod 2775 /data/mephi-web
+   75  stat /data/mephi-web
+   76  id mephi-admin
+   77  getent group mephi-devs
+   78  getenforce
+   79  semanage fcontext -a -t httpd_sys_content_t "/data/mephi-web(/.*)?"
+   80  restorecon -Rv /data/mephi-web
+   81  ls -Zd /data/mephi-web
+   82  sed -i 's|root /usr/share/nginx/html;|root /data/mephi-web;|g' /etc/nginx/nginx.conf
+   83  grep "root /data/mephi-web" /etc/nginx/nginx.conf
+   84  nginx -t
+   85  systemctl reload nginx
+   86  ls -la /usr/sbin/tcpdump
+   87  setcap cap_net_raw,cap_net_admin+ep /usr/sbin/tcpdump
+   88  getcap /usr/sbin/tcpdump
+   89  history > /home/mephi-admin/project_history_root.txt
+   90  cat /home/mephi-admin/project_history_root.txt
+   91  sudo -u mephi-admin tcpdump --help
+   92  history > /home/mephi-admin/project_history_root.txt
+   93  cat /home/mephi-admin/project_history_root.txt
+   94  echo root > /etc/ssh/denied_users
+   95  chmod 644 /etc/ssh/denied_users
+   96  vi /etc/pam.d/sshd
+   97  vi /etc/pam.d/login
+   98  head -5 /etc/pam.d/sshd
+   99  head -5 /etc/pam.d/login
+  100  systemctl restart sshd
+  101  systemctl status sshd --no-pager
+  102  history > /home/mephi-admin/project_history_root.txt
+  103  su - mephi-admin
+  104  grep "root /data/mephi-web" /etc/nginx/nginx.conf
+  105  cat /etc/nginx/nginx.conf | grep "root"
+  106  sed -i 's|root /usr/share/nginx/html;|root /data/mephi-web;|g' /etc/nginx/nginx.conf
+  107* grep "root" /data/mephi-web" /etc/nginx/nginx.co
+  108  grep "root" /etc/nginx/nginx.conf
+  109  nginx -t
+  110  sed -i 's|/usr/share/nginx/html|/data/mephi-web|g' /etc/nginx/nginx.conf
+  111  grep "root" /etc/nginx/nginx.conf
+  112  nginx -t
+  113  systemctl reload nginx
+  114  hystory
+  115  history >> /home/mephi-admin/project_history_root.txt
+    1  ip a
+    2  nmcli con show
+    3  nmcli con mod enp0s3 ipv4.addresses 192.168.1.100/24
+    4  nmcli con mod enp0s3 ipv4.gateway 192.168.1.1
+    5  nmcli con mod enp0s3 ipv4.dns 8.8.8.8
+    6  nmcli con mod enp0s3 ipv4.method manual
+    7  nmcli con up enp0s3
+    8  hostnamectl set-hostname mephi-2026.domain.local
+    9  ip a show enp0s3
+   10  ip route | grep default
+   11  ping -c 4 8.8.8.8
+   12  ping -c 4 192.168.1.1
+   13  ping -c 4 8.8.8.8 > /tmp/network_check.txt
+   14  ping -c 4 192.168.1.1 >> /tmp/network_check.txt
+   15  cat /tmp/network_check.txt
+   16  dnf install -y nginx tcpdump libcap-ng-utils
+   17  cat /etc/resolv.conf
+   18  ping -c 2 8.8.8.8
+   19  printf 'nameserver 8.8.8.8\n' > /etc/resolv.conf
+   20  cat /etc/resolv.conf
+   21  ping -c 3 mirrors.fedoraproject.org
+   22  echo "nameserver 1.1.1.1" >> /ect/resolv.conf
+   23  dnf install -y nginx tcpdump libcap-ng-utils
+   24  nmcli con mod enp0s3 ipv4.method auto
+   25  nmcli con up enp0s3
+   26  ping -c 2 8.8.8.8
+   27  nmcli con mod enp0s3 ipv4.addresses ""
+   28  nmcli con down "enp0s3"
+   29  nmcli con up enp0s3
+   30  ip a
+   31  ip route
+   32  ping -c 2 8.8.8.8
+   33  nmcli con delete enp0s3
+   34  nmcli con add type ethernet ifname enp0s3 con-name dhcp-wired
+   35  nmcli con up "dhcp-wired"
+   36  ip a
+   37  ip route
+   38  ping -c 2 8.8.8.8
+   39  dnf install -y nginx tcpdump libcap-ng-utils
+   40  cd /tmp
+   41  dnf download tcpdump
+   42  ls -la tcpdump*.rpm
+   43  rpm -Uvh tcpdump-*.rpm
+   44  tcpdump --version | head -n 1
+   45  ls -la tcpdump*.rpm
+   46  lsblk
+   47  fdisk -l
+   48  fdisk /dev/sdb
+   49  lsblk
+   50  mkfs.ext4 -L MEPHI_DATA /dev/sdb1
+   51  blkid /dev/sdb1
+   52  mkdir -p /data/mephi-web
+   53  echo "LABLE=MEPHI_DATA /data/mephi-web ext4 defaults 0 2" >> /etc/fstab
+   54  mount -a
+   55  lsblk
+   56  df -h | grep mephi
+   57  sed -i '/LABLE=MEPHI_DATA/s' /etc/fstab
+   58  sed -i '/LABLE=MEPHI_DATA/d' /etc/fstab
+   59  echo "LABEL=MEPHI_DATA /data/mephi-web ext4 defaults 0 2" >> /etc/fstab
+   60  cat /etc/fstab | grep MEPHI
+   61  mount -a
+   62  df -h | grep mephi
+   63  systemctl enable --now nginx
+   64  systemctl status nginx
+   65  journalctl -u nginx --since "5 minutes ago" > /tmp/nginx_recent_logs
+   66  journalctl -u nginx --since "5 minutes ago" > /tmp/nginx_recent_logs.txt
+   67  cat /tmp/nginx_recent_logs.txt
+   68  useradd mephi-admin
+   69  echo "P@ssw0rd2026" | passwd --stdin mephi-admin
+   70  groupadd mephi-devs
+   71  usermod -aG mephi-devs mephi-admin
+   72  id mephi-admin
+   73  chown -R mephi-admin:mephi-devs /data/mephi-web
+   74  chmod 2775 /data/mephi-web
+   75  stat /data/mephi-web
+   76  id mephi-admin
+   77  getent group mephi-devs
+   78  getenforce
+   79  semanage fcontext -a -t httpd_sys_content_t "/data/mephi-web(/.*)?"
+   80  restorecon -Rv /data/mephi-web
+   81  ls -Zd /data/mephi-web
+   82  sed -i 's|root /usr/share/nginx/html;|root /data/mephi-web;|g' /etc/nginx/nginx.conf
+   83  grep "root /data/mephi-web" /etc/nginx/nginx.conf
+   84  nginx -t
+   85  systemctl reload nginx
+   86  ls -la /usr/sbin/tcpdump
+   87  setcap cap_net_raw,cap_net_admin+ep /usr/sbin/tcpdump
+   88  getcap /usr/sbin/tcpdump
+   89  history > /home/mephi-admin/project_history_root.txt
+   90  cat /home/mephi-admin/project_history_root.txt
+   91  sudo -u mephi-admin tcpdump --help
+   92  history > /home/mephi-admin/project_history_root.txt
+   93  cat /home/mephi-admin/project_history_root.txt
+   94  echo root > /etc/ssh/denied_users
+   95  chmod 644 /etc/ssh/denied_users
+   96  vi /etc/pam.d/sshd
+   97  vi /etc/pam.d/login
+   98  head -5 /etc/pam.d/sshd
+   99  head -5 /etc/pam.d/login
+  100  systemctl restart sshd
+  101  systemctl status sshd --no-pager
+  102  history > /home/mephi-admin/project_history_root.txt
+  103  su - mephi-admin
+  104  grep "root /data/mephi-web" /etc/nginx/nginx.conf
+  105  cat /etc/nginx/nginx.conf | grep "root"
+  106  sed -i 's|root /usr/share/nginx/html;|root /data/mephi-web;|g' /etc/nginx/nginx.conf
+  107* grep "root" /data/mephi-web" /etc/nginx/nginx.co
+  108  grep "root" /etc/nginx/nginx.conf
+  109  nginx -t
+  110  sed -i 's|/usr/share/nginx/html|/data/mephi-web|g' /etc/nginx/nginx.conf
+  111  grep "root" /etc/nginx/nginx.conf
+  112  nginx -t
+  113  systemctl reload nginx
+  114  hystory
+  115  history >> /home/mephi-admin/project_history_root.txt
+  116  cat /home/mephi-admin/project_history_root.txt
+  117  su - mephi-admin
+  118  curl http://localhost
+  119  curl http://127.0.0.1
+  120  history >> /home/mephi-admin/project_history_root.txt
+    1  echo "Hello from Student: M255920" > /data/mephi-web/index.html
+    2  cat /data/mephi-web/index.html
+    3  curl http://localhost
+    4  curl http://127.0.0.1
+    5  cat /data/mephi-web/index.html
+    6  ls -la /data/mephi-web/
+    7  sudo dnf install -y curl
+    8  history > /home/mephi-admin/project_history_mephi.txt
+    1  echo "Hello from Student: M255920" > /data/mephi-web/index.html
+    2  cat /data/mephi-web/index.html
+    3  curl http://localhost
+    4  curl http://127.0.0.1
+    5  cat /data/mephi-web/index.html
+    6  ls -la /data/mephi-web/
+    7  sudo dnf install -y curl
+    8  history > /home/mephi-admin/project_history_mephi.txt
+    9  exit
+   10  echo "Hello from Student: M255920" > /data/mephi-web/index.html
+   11  cat /data/mephi-web/index.html
+   12  curl http://localhost
+   13  curl http://127.0.0.1
+   14  history >> /home/mephi-admin/project_history_mephi.txt
